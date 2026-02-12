@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For Someone Special 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:"Poppins",sans-serif;
+    background:linear-gradient(-45deg,#ff9a9e,#fad0c4,#fbc2eb,#a18cd1);
+    background-size:400% 400%;
+    animation:bgMove 10s ease infinite;
+    overflow:hidden;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.card{
+    width:min(92%,420px);
+    padding:40px 30px;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(20px);
+    border-radius:30px;
+    text-align:center;
+    box-shadow:0 30px 80px rgba(0,0,0,0.25);
+    transition:0.5s;
+}
+
+.emoji{
+    font-size:65px;
+    margin-bottom:15px;
+    animation:heartbeat 1.6s infinite;
+}
+
+@keyframes heartbeat{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.15);}
+}
+
+h2{
+    font-family:"Playfair Display",serif;
+    font-size:28px;
+    color:#4a1c2f;
+    margin-bottom:25px;
+}
+
+.buttons{
+    position:relative;
+    height:70px;
+}
+
+button{
+    position:absolute;
+    padding:14px 36px;
+    border:none;
+    border-radius:40px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+#yes{
+    left:15%;
+    background:linear-gradient(135deg,#ff4d6d,#ff758f);
+    color:white;
+}
+
+#yes:hover{transform:translateY(-3px);}
+
+#no{
+    left:55%;
+    background:white;
+    color:#777;
+}
+
+/* Success Screen */
+.success{
+    position:fixed;
+    inset:0;
+    background:black;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    opacity:0;
+    visibility:hidden;
+    transition:0.8s ease;
+    color:white;
+    padding:20px;
+    overflow:auto;
+}
+
+.success.active{
+    opacity:1;
+    visibility:visible;
+}
+
+/* Gallery Layout */
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-bottom:30px;
+    max-width:600px;
+}
+
+.gallery img{
+    width:100%;
+    height:160px;
+    object-fit:cover;
+    border-radius:15px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.6);
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeUp 0.8s forwards;
+}
+
+.gallery img:nth-child(1){animation-delay:0.3s;}
+.gallery img:nth-child(2){animation-delay:0.6s;}
+.gallery img:nth-child(3){animation-delay:0.9s;}
+.gallery img:nth-child(4){animation-delay:1.2s;}
+.gallery img:nth-child(5){
+    grid-column:span 2;
+    height:220px;
+    animation-delay:1.5s;
+}
+
+@keyframes fadeUp{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.typing{
+    font-size:22px;
+    max-width:600px;
+    line-height:1.6;
+    min-height:100px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <div class="emoji">🐱❤️</div>
+    <h2>Pucha,<br>will you be my Valentine?</h2>
+
+    <div class="buttons">
+        <button id="yes">Yes 💖</button>
+        <button id="no">No 🙈</button>
+    </div>
+</div>
+
+<div class="success" id="success">
+    <div class="gallery">
+        <img src="C:\Users\sahil\OneDrive\Pictures\photo 2.jpeg">
+        <img src="C:\Users\sahil\OneDrive\Pictures\photo 1.jpeg">
+        <img src="C:\Users\sahil\OneDrive\Pictures\photo 4.jpeg">
+        <img src="C:\Users\sahil\OneDrive\Pictures\photo 5.jpeg">
+    </div>
+    <div class="typing" id="typingText"></div>
+</div>
+
+<audio id="bgMusic" src="https://assets.mixkit.co/music/preview/mixkit-love-1114.mp3"></audio>
+
+<script>
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+const card=document.querySelector(".card");
+const success=document.getElementById("success");
+const typingText=document.getElementById("typingText");
+const bgMusic=document.getElementById("bgMusic");
+
+// NO click
+noBtn.addEventListener("click",()=>{
+    alert('Batau abhi "no"? 😼💗');
+});
+
+// Move NO button
+noBtn.addEventListener("mouseenter",()=>{
+    noBtn.style.left=Math.random()*300+"px";
+    noBtn.style.top=Math.random()*50+"px";
+});
+
+// YES click
+yesBtn.addEventListener("click",()=>{
+    bgMusic.play();
+
+    confetti({
+        particleCount:300,
+        spread:150,
+        origin:{y:0.6}
+    });
+
+    card.style.opacity="0";
+
+    setTimeout(()=>{
+        success.classList.add("active");
+        typeMessages();
+    },500);
+});
+
+function typeMessages(){
+    const messages=[
+        "Good girl, let’s make more like these going forward 💕",
+        "You are the best thing that happened to me ❤️",
+	"I LOVE YOU ❤️"
+    ];
+
+    let msgIndex=0;
+    let charIndex=0;
+
+    function type(){
+        if(msgIndex<messages.length){
+            if(charIndex<messages[msgIndex].length){
+                typingText.innerHTML+=messages[msgIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type,60);
+            }else{
+                typingText.innerHTML+="<br><br>";
+                msgIndex++;
+                charIndex=0;
+                setTimeout(type,800);
+            }
+        }
+    }
+
+    type();
+}
+</script>
+
+</body>
+</html>
